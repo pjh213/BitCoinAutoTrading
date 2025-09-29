@@ -1,0 +1,14 @@
+# General
+tests/
+
+# Environments
+.env
+venv/
+/venv
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE settings
+.idea/
