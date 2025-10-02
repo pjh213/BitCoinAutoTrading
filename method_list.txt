@@ -1,0 +1,138 @@
+업비트 자동매매 프로그램 - 클래스 및 메소드 정리
+
+1. 클래스 UpbitAPI (10개 메소드)
+    
+    def __init__(self):
+        - 매개변수: 없음
+        - 역할: 업비트 API 클라이언트 초기화, Key.txt에서 자동으로 API 키 로드
+    
+    def _load_api_keys(self):
+        - 매개변수: 없음
+        - 역할: Key.txt 파일에서 API 키(access_key, secret_key)를 읽어오는 내부 메소드
+    
+    def _get_headers(self, query_string=None):
+        - 매개변수: query_string (선택적, 쿼리 문자열)
+        - 역할: JWT 토큰을 생성하여 API 요청용 헤더를 만드는 내부 메소드
+    
+    def get_accounts(self):
+        - 매개변수: 없음
+        - 역할: 현재 보유 자산 정보를 조회하여 리스트로 반환
+    
+    def get_ticker_price(self, market):
+        - 매개변수: market (마켓 코드, 예: KRW-BTC)
+        - 역할: 특정 마켓의 현재 가격을 조회 (공개 API 사용)
+    
+    def get_candles(self, market, interval='minutes', count=200):
+        - 매개변수: market (마켓 코드), interval (시간 간격), count (캔들 개수)
+        - 역할: 기술적 분석을 위한 캔들 데이터 조회
+    
+    def place_buy_order(self, market, price):
+        - 매개변수: market (마켓 코드), price (매수할 금액)
+        - 역할: 시장가 매수 주문 실행
+    
+    def place_sell_order(self, market, volume):
+        - 매개변수: market (마켓 코드), volume (매도할 수량)
+        - 역할: 시장가 매도 주문 실행
+    
+    def get_balance(self, currency):
+        - 매개변수: currency (통화 코드, 예: KRW, BTC)
+        - 역할: 특정 통화의 사용 가능한 잔고 조회
+    
+    def display_assets(self):
+        - 매개변수: 없음
+        - 역할: 현재 보유 자산을 보기 좋게 콘솔에 출력
+
+2. 클래스 GridTradingBot (9개 메소드)
+    
+    def __init__(self, upbit_api, target_coin):
+        - 매개변수: upbit_api (UpbitAPI 인스턴스), target_coin (매매할 코인명)
+        - 역할: 그리드 트레이딩 봇 초기화 및 그리드 설정
+    
+    def _initialize_grids(self):
+        - 매개변수: 없음
+        - 역할: 그리드 가격대를 초기화하고 매수/매도 구간 설정
+    
+    def _check_buy_signals(self, current_price):
+        - 매개변수: current_price (현재 가격)
+        - 역할: 현재 가격에서 실행할 매수 그리드 신호 체크
+    
+    def _check_sell_signals(self, current_price):
+        - 매개변수: current_price (현재 가격)
+        - 역할: 현재 가격에서 실행할 매도 그리드 신호 체크
+    
+    def _execute_grid_buy(self, grid_price):
+        - 매개변수: grid_price (그리드 가격)
+        - 역할: 특정 그리드 가격에서 매수 주문 실행
+    
+    def _execute_grid_sell(self, grid_price):
+        - 매개변수: grid_price (그리드 가격)
+        - 역할: 특정 그리드 가격에서 매도 주문 실행
+    
+    def _reset_executed_grids(self, current_price):
+        - 매개변수: current_price (현재 가격)
+        - 역할: 가격이 역방향으로 움직일 때 실행된 그리드 초기화
+    
+    def run_once(self):
+        - 매개변수: 없음
+        - 역할: 한 번의 그리드 트레이딩 사이클 실행
+    
+    def start_trading(self):
+        - 매개변수: 없음
+        - 역할: 그리드 트레이딩 시작 (무한 루프로 실행)
+
+3. 클래스 TradingBot (10개 메소드)
+    
+    def __init__(self, upbit_api, target_coin):
+        - 매개변수: upbit_api (UpbitAPI 인스턴스), target_coin (매매할 코인명)
+        - 역할: 이동평균 전략 자동매매 봇 초기화
+    
+    def calculate_moving_average(self, prices, period):
+        - 매개변수: prices (가격 리스트), period (이동평균 기간)
+        - 역할: 단순 이동평균(SMA) 계산
+    
+    def calculate_ema(self, prices, period):
+        - 매개변수: prices (가격 리스트), period (EMA 기간)
+        - 역할: 지수 이동평균(EMA) 계산
+    
+    def calculate_rsi(self, prices, period=14):
+        - 매개변수: prices (가격 리스트), period (RSI 기간, 기본값 14)
+        - 역할: RSI(상대강도지수) 계산 (0-100 값 반환)
+    
+    def calculate_volume_ma(self, candles, period=20):
+        - 매개변수: candles (캔들 데이터), period (기간, 기본값 20)
+        - 역할: 거래량 이동평균 계산
+    
+    def analyze_market(self):
+        - 매개변수: 없음
+        - 역할: 고급 이동평균 교차 전략으로 시장 분석 후 매매 신호('BUY', 'SELL', 'HOLD') 생성
+    
+    def execute_buy(self):
+        - 매개변수: 없음
+        - 역할: 정교한 매수 실행 (리스크 관리, 급변동 감지, 수량 계산 포함)
+    
+    def execute_sell(self):
+        - 매개변수: 없음
+        - 역할: 정교한 매도 실행 (수익률 분석, 최소 주문량 체크 포함)
+    
+    def run_once(self):
+        - 매개변수: 없음
+        - 역할: 한 번의 고급 매매 사이클 실행 (상세한 분석 리포트 포함)
+    
+    def start_trading(self):
+        - 매개변수: 없음
+        - 역할: 고급 이동평균 전략 자동매매 시작 (다중 지표 분석)
+
+4. 일반 함수 (1개)
+    
+    def main():
+        - 매개변수: 없음
+        - 역할: 프로그램의 메인 실행 함수 (API 초기화, 모드 선택, 매매 시작)
+
+========================================
+총 메소드 수: 30개
+- UpbitAPI: 10개 (API 통신 및 자산 관리)
+- GridTradingBot: 9개 (그리드 트레이딩 전략)
+- TradingBot: 10개 (고오급 이동평균 전략)
+- 일반 함수: 1개 (프로그램 진입점)
+
+최근 업데이트: 그런건 없다
