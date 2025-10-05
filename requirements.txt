@@ -1,2 +1,8 @@
-pyupbit
+numpy
+pandas
+pip
+pytz
+requests
+six
+PyJWT
 python-dotenv
